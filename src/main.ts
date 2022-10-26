@@ -1,3 +1,5 @@
-import { APP_NAME } from './constants';
+import { HarmoniesColor } from './domain/color/HarmoniesColor';
+import { Transforms } from './domain/color/transforms';
+import { ColorModels } from './domain/color/ColorModels';
 
-print(`${APP_NAME} say "Hello World!"`);
+export { HarmoniesColor, Transforms, ColorModels };
