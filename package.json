@@ -1,0 +1,43 @@
+{
+  "name": "ase-color",
+  "version": "1.0.0",
+  "description": "A super set of color handler for aseprite",
+  "scripts": {
+    "doc": "typedoc src --out docs --mode modules --name \"ase-color\" --pretty --theme github-dark ",
+    "doc:watch": "npm run doc --watch",
+    "build": "tstl",
+    "dev": "tstl --watch",
+    "test": "aseprite --script-param env=development --script `pwd`/dist/app.lua",
+    "lint": "eslint -f unix \"src/**/*.{ts,tsx}\""
+  },
+  "author": {
+    "name": "JuanDAC",
+    "email": "juanavila12.0308@gmail.com",
+    "url": "JuanDAC"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuanDAC.git"
+  },
+  "keywords": [],
+  "license": "GNU General Public License v3.0",
+  "bugs": {
+    "url": "https://github.com/JuanDAC/issues"
+  },
+  "homepage": "https://github.com/JuanDAC#readme",
+  "devDependencies": {
+    "@microsoft/tsdoc": "^0.14.1",
+    "@types/node": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
+    "dota-lua-types": "^4.6.1",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.20.0",
+    "eslint-plugin-tsdoc": "^0.2.16",
+    "ts-node": "^10.9.1",
+    "typedoc": "^0.23.7",
+    "typescript": "^4.7.4",
+    "types-aseprite": "^1.0.2",
+    "typescript-to-lua": "^1.10.1"
+  }
+}
