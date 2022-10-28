@@ -19,23 +19,24 @@ export class ColorModels {
     return XYZ;
   }
 
-  static color_distance(this: any, colorOne: ColorRGB, colortwo: ColorRGB) {
+  static colorDistance(this: any, colorOne: ColorRGB, colortwo: ColorRGB) {
     const lab1 = ColorModels.RGB2LAB(colorOne);
     const lab2 = ColorModels.RGB2LAB(colortwo);
     const dl = lab1.l - lab2.l;
     const C1 = Math.sqrt(lab1.a * lab1.a + lab1.b * lab1.b);
     const C2 = Math.sqrt(lab2.a * lab2.a + lab2.b * lab2.b);
     const dC = C1 - C2;
-    const da = lab1.a - lab2.a;
-    const db = lab1.b - lab2.b;
-    const dH = Math.sqrt(Math.max(0, da * da + db * db - dC * dC));
+    const dC2 = Math.pow(dC, 2);
+    const da2 = Math.pow(lab1.a - lab2.a, 2);
+    const db2 = Math.pow(lab1.b - lab2.b, 2);
+    const dH = Math.sqrt(Math.max(0, da2 + db2 - dC2));
     const Kl = 1.0;
     const K1 = 0.045;
     const K2 = 0.015;
-    const s1 = dl / Kl;
-    const s2 = dC / (Kl + K1 * C1);
-    const s3 = dH / (Kl + K2 * C1);
-    return Math.sqrt(s1 * s1 + s2 * s2 + s3 * s3);
+    const s12 = Math.pow(dl / Kl, 2);
+    const s22 = Math.pow(dC / (Kl + K1 * C1), 2);
+    const s32 = Math.pow(dH / (Kl + K2 * C1), 2);
+    return Math.sqrt(s12 + s22 + s32);
   }
   static get_color(col: Color) {
     if (typeof col === 'string') {
@@ -43,7 +44,7 @@ export class ColorModels {
     }
     return col;
   }
-  static HSV_TO_RGB(this: any, { h, s, v }: ColorHSV) {
+  static HSV2RGB(this: any, { h, s, v }: ColorHSV) {
     const HsubI = Math.abs((h / 60) % 6);
     const f = ((h / 60) % 6) - HsubI;
     const p = v * (1 - s) * 255;
@@ -57,7 +58,7 @@ export class ColorModels {
     if (HsubI == 4) return { red: t, green: p, blue: v };
     if (HsubI == 5) return { red: v, green: p, blue: q };
   }
-  static RGB_TO_HSV(this: any, { red, green, blue }: ColorRGB) {
+  static RGB2HSV(this: any, { red, green, blue }: ColorRGB) {
     const min = Math.min(red, green, blue);
     const max = Math.max(red, green, blue);
     const r = red,
@@ -107,7 +108,7 @@ export class ColorModels {
     else h = 171 + (43 * (r - g)) / (max - min);
     return { h, s, v };
   }
-  static RGB_TO_HSL(this: any, { red, green, blue }: ColorRGB) {
+  static RGB2HSL(this: any, { red, green, blue }: ColorRGB) {
     const [r, g, b] = NumTS.divide([red, green, blue], 255);
     let h = 0,
       s = 0,
@@ -140,7 +141,7 @@ export class ColorModels {
     h = h / 6.0;
     return { h, s, l };
   }
-  static HSL_TO_RGB(this: any, { h, s, l }: ColorHSL) {
+  static HSL2RGB(this: any, { h, s, l }: ColorHSL) {
     let r = l,
       g = l,
       b = l;
@@ -166,7 +167,7 @@ export class ColorModels {
     b = b * 255;
     return { red: r, green: g, blue: b };
   }
-  static RGB_TO_YUV(this: any, { red, green, blue }: ColorRGB) {
+  static RGB2YUV(this: any, { red, green, blue }: ColorRGB) {
     const [r, g, b] = NumTS.divide([red, green, blue], 255);
     const [y, u, v] = [
       16 + (65.738 * r) / 256 + (129.057 * g) / 256 + (25.064 * b) / 256,
@@ -175,11 +176,11 @@ export class ColorModels {
     ];
     return { y, u, v };
   }
-  static YUV_TO_RGB(this: any, { y, u, v }: ColorYUV) {
+  static YUV2RGB(this: any, { y, u, v }: ColorYUV) {
     const [r, g, b] = [y + 1.14 * v, y - 0.396 * u - 0.581 * v, y + 2.029 * u];
     return { red: r * 255, green: g * 255, blue: b * 255 };
   }
-  static RGB_TO_CMYK(this: any, { red, green, blue }: ColorRGB) {
+  static RGB2CMYK(this: any, { red, green, blue }: ColorRGB) {
     let [c, m, y] = [255 - red, 255 - green, 255 - blue];
     const b = Math.min(c, m, y);
     c = Math.round((c - b) / (255 - b));
@@ -188,14 +189,14 @@ export class ColorModels {
     const k = Math.round(b / 255);
     return { c, m, y, k };
   }
-  static CMYK_TO_RGB(this: any, { c, m, y, k }: ColorCMYK) {
+  static CMYK2RGB(this: any, { c, m, y, k }: ColorCMYK) {
     const [r, g, b] = [255 - Math.round(2.55 * (c + k)), 255 - Math.round(2.55 * (m + k)), 255 - Math.round(2.55 * (y + k))];
     const red = Math.max(r, 0);
     const green = Math.max(g, 0);
     const blue = Math.max(b, 0);
     return { red, green, blue };
   }
-  static RGB_TO_RGBA({ red, green, blue, alfa }: ColorRGB) {
+  static RGB2RGBA({ red, green, blue, alfa }: ColorRGB) {
     const min = Math.min(red, green, blue);
     const a = (255 - min) / 255;
     red = Math.round((red - min) / a);
@@ -204,10 +205,10 @@ export class ColorModels {
     alfa = Math.round(a);
     return { red, green, blue, alfa };
   }
-  static RGB_TO_HEX(this: any, { red, green, blue }: ColorRGB) {
+  static RGB2HEX(this: any, { red, green, blue }: ColorRGB) {
     return `#${red.toString(16).padEnd(2, '00')}${green.toString(16).padEnd(2, '00')}${blue.toString(16).padEnd(2, '00')}`;
   }
-  static HEX_TO_RGB(hex: ColorHex) {
+  static HEX2RGB(hex: ColorHex) {
     if ((hex.length !== 4 && hex.length !== 7) || !hex.startsWith('#')) return { red: 0, green: 0, blue: 0 };
     let r, g, b;
     if (hex.length == 4) {
@@ -224,11 +225,11 @@ export class ColorModels {
     }
     return { red: parseInt(r, 16), green: parseInt(g, 16), blue: parseInt(b, 16) };
   }
-  static HEX_TO_GRAY(this: any, { red, green, blue }: ColorRGB) {
+  static HEX2GRAY(this: any, { red, green, blue }: ColorRGB) {
     const gray = (red + green + blue) / 3;
     return { red: gray, green: gray, blue: gray };
   }
-  static RGB_TO_CIE(this: any, { red, green, blue }: ColorRGB) {
+  static RGB2CIE(this: any, { red, green, blue }: ColorRGB) {
     const [x, y, z] = [red / (red + green + blue), green / (red + green + blue), blue / (red + green + blue)];
     return { x, y, z };
   }
