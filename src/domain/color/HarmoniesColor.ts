@@ -26,9 +26,9 @@ export class HarmoniesColor {
   }
   static patternPalette(
     this: any,
-    { color, angle, delta, premise = () => true, palette = [], initial_color = color, index = 0 }: PatternPalette
+    { color, angle, delta, premise = () => true, palette = [], initial_color = color, index = 1 }: PatternPalette
   ): Color[] {
-    if (index <= math.floor(360 / angle + 0.5)) {
+    if (index <= Math.floor(360 / angle + 0.5)) {
       const new_color = HarmoniesColor.transformation({
         color,
         delta: { h: angle } as ColorHSV,
