@@ -38,7 +38,17 @@ export class Transforms {
     return [colorOne, colorTwo];
   }
 
-  static contrast(colorOne: Color, colorTwo: Color) {
+  static contrast(
+    colorOne: Color,
+    colorTwo: Color
+  ): [
+    number,
+    {
+      text: boolean;
+      textBest: boolean;
+      colorBlind: boolean;
+    }
+  ] {
     const lum1 = colorOne.lightness;
     const lum2 = colorTwo.lightness;
     const brightest = math.max(lum1, lum2);
