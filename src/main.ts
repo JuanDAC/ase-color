@@ -1,5 +1,5 @@
-import { HarmoniesColor } from './domain/color/HarmoniesColor';
-import { Transforms } from './domain/color/transforms';
-import { ColorModels } from './domain/color/ColorModels';
+import { HarmoniesColor } from './HarmoniesColor';
+import { Transforms } from './transforms';
+import { ColorModels } from './ColorModels';
 
 export { HarmoniesColor, Transforms, ColorModels };
