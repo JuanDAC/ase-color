@@ -1,6 +1,5 @@
 # AseColor 🌈 - A Superset of Color Handlers for Aseprite
 
-![AseColor](https://your-imagelink.com/asecolor.png)
 
 ## Introduction
 
